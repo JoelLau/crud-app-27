@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  web-app-prod:
+    build:
+      context: ./
+      dockerfile: ./.docker/front-end/prod/Dockerfile
+    ports:
+      - "8080:80"
+    networks:
+      - public
+
+  web-app-dev:
+    build:
+      context: ./
+      dockerfile: ./.docker/front-end/dev/Dockerfile
+    volumes:
+      - ./front-end:/usr/src/app
+    ports:
+      - "4200:4200"
+    expose:
+      - "4200"
+    networks:
+      - public
+
+networks:
+  public:
+    driver: bridge

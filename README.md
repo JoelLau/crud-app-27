@@ -1,10 +1,30 @@
 # crud-app-27
 
+## Usage
+
+Run
+
+```bash
+docker-compose up
+```
+
+Run (background process)
+
+```bash
+docker-compose up -d
+```
+
+Remove
+
+```bash
+docker-compose down
+```
+
 ## Docker Containers
 
 - Frontend:
-  - nginx
-  - node
+  - `web-app-prd` for production build
+  - `web-app-dev` for hot reloadable dev build
 - Backend:
   - PHP
   - Apache
