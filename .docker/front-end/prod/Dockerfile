@@ -1,5 +1,5 @@
 # Builder (Node) Image
-FROM node:alpine as builder
+FROM node:15-alpine3.10 as builder
 
 RUN apk update && apk add --no-cache make git
 
@@ -16,7 +16,7 @@ RUN npm install -g @angular/cli
 RUN ng build --prod
 
 # serve
-FROM nginx:alpine
+FROM nginx:1.19-alpine
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /app/dist/front-end/* usr/share/nginx/html
 EXPOSE 80
