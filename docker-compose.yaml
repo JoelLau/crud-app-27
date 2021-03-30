@@ -1,16 +1,14 @@
 version: "3.9"
 
 services:
-  web-app-prod:
+  front-end-prod:
     build:
       context: ./
       dockerfile: ./.docker/front-end/prod/Dockerfile
     ports:
       - "8080:80"
-    networks:
-      - public
 
-  web-app-dev:
+  front-end-dev:
     build:
       context: ./
       dockerfile: ./.docker/front-end/dev/Dockerfile
@@ -20,9 +18,22 @@ services:
       - "4200:4200"
     expose:
       - "4200"
-    networks:
-      - public
 
-networks:
-  public:
-    driver: bridge
+  apache:
+    build:
+      context: ./
+      dockerfile: ./.docker/back-end/apache/Dockerfile
+    ports:
+      - 82:80
+    volumes:
+      - ./.docker/back-end/apache/:/etc/apache2/sites-enabled
+      - ./back-end:/home/wwwroot/back-end
+    depends_on:
+      - back-end-php-fpm
+
+  back-end-php-fpm:
+    build:
+      context: ./
+      dockerfile: ./.docker/back-end/php-fpm/Dockerfile
+    volumes:
+      - ./back-end:/home/wwwroot/back-end
