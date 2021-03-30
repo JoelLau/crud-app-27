@@ -19,7 +19,7 @@ services:
     expose:
       - "4200"
 
-  apache:
+  back-end-apache:
     build:
       context: ./
       dockerfile: ./.docker/back-end/apache/Dockerfile
