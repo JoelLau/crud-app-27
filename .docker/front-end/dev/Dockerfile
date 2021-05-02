@@ -6,8 +6,12 @@ RUN apk update && apk add --no-cache make git
 WORKDIR /usr/src/app
 
 # install
-RUN rm -rf node_modules dist
+COPY ./front-end .
+RUN npm install -g npm
+RUN rm -rf node_modules
+RUN rm -rf dist
 RUN npm install
+RUN npm update
 
 # build
 EXPOSE 4200

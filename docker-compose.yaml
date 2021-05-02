@@ -12,14 +12,12 @@ services:
     build:
       context: ./
       dockerfile: ./.docker/front-end/dev/Dockerfile
-    volumes:
-      - ./front-end:/usr/src/app
     ports:
       - "4200:4200"
     expose:
       - "4200"
 
-  apache:
+  back-end-apache:
     build:
       context: ./
       dockerfile: ./.docker/back-end/apache/Dockerfile
@@ -37,3 +35,15 @@ services:
       dockerfile: ./.docker/back-end/php-fpm/Dockerfile
     volumes:
       - ./back-end:/home/wwwroot/back-end
+
+  data-mysql:
+    image: mysql:8
+    volumes:
+      - ./.docker/data/mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
