@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  front-end-prod:
+    build:
+      context: ./
+      dockerfile: ./.docker/front-end/prod/Dockerfile
+    ports:
+      - "8080:80"
+
+  front-end-dev:
+    build:
+      context: ./
+      dockerfile: ./.docker/front-end/dev/Dockerfile
+    ports:
+      - "4200:4200"
+    expose:
+      - "4200"
+
+  back-end-apache:
+    build:
+      context: ./
+      dockerfile: ./.docker/back-end/apache/Dockerfile
+    ports:
+      - 82:80
+    volumes:
+      - ./.docker/back-end/apache/:/etc/apache2/sites-enabled
+      - ./back-end:/home/wwwroot/back-end
+    depends_on:
+      - back-end-php-fpm
+
+  back-end-php-fpm:
+    build:
+      context: ./
+      dockerfile: ./.docker/back-end/php-fpm/Dockerfile
+    volumes:
+      - ./back-end:/home/wwwroot/back-end
+
+  data-mysql:
+    image: mysql:8
+    volumes:
+      - ./.docker/data/mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
